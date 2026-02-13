@@ -9,36 +9,25 @@ jobs:
     runs-on: macos-latest # 빌드 환경을 macOS로 설정
 
     steps:
-      # 1. 코드 가져오기
       - uses: actions/checkout@v3
       
-      # 2. 파이썬 설치
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      # 3. 필요한 라이브러리 설치
       - name: Install dependencies
         run: |
           pip install selenium pandas openpyxl pyinstaller
 
-      # 4. PyInstaller로 .app 파일 빌드
       - name: Build with PyInstaller
         run: |
-          # --- [수정] 결과물 이름 insta_crew4_mac로 지정! ---
+          # --- [수정] 파일 이름 통일! (앱 이름 = insta_crew4_mac) ---
           pyinstaller --noconfirm --onefile --windowed --name insta_crew4_mac insta_crew4.py
-          # --------------------------------
 
-      # 5. 빌드된 .app 파일을 Zip으로 압축
-      - name: Zip the app
-        run: |
-          cd dist
-          zip -r insta_crew4_mac.zip insta_crew4_mac.app
-
-      # 6. 압축된 파일 저장소에 저장 (Artifact)
+      # --- [수정] 깃헙이 자동으로 Zip 해주는 방식! (압축 명령어 삭제) ---
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: insta_crew4_mac # 다운로드할 Zip 파일 이름
-          path: dist/insta_crew4_mac.zip # 압축된 파일 위치
+          name: insta_crew4_mac # 깃헙이 자동으로 zip으로 만들어서 다운로드 됨!
+          path: dist/insta_crew4_mac.app # 이 파일 하나만 쏙!
