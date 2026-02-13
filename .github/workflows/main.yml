@@ -1,0 +1,32 @@
+name: Build Mac Executable
+
+on:
+  push:
+    branches: [ main ] # main 브랜치에 push될 때 작동
+
+jobs:
+  build:
+    runs-on: macos-latest # 맥 환경에서 실행
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # 사용하는 파이썬 버전
+
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller selenium pandas openpyxl
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile --name insta_crew4-mac insta_crew4.py
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: insta_crew4-mac
+          path: dist/insta_crew4-mac
