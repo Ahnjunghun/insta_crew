@@ -26,13 +26,19 @@ jobs:
       # 4. PyInstaller로 .app 파일 빌드
       - name: Build with PyInstaller
         run: |
-          # --- [수정] 파일명 insta_crew4로 변경! ---
-          pyinstaller --noconfirm --onefile --windowed --name insta_crew4 insta_crew4.py
+          # --- [수정] 결과물 이름 insta_crew4_mac로 지정! ---
+          pyinstaller --noconfirm --onefile --windowed --name insta_crew4_mac insta_crew4.py
           # --------------------------------
 
-      # 5. 빌드된 .app 파일을 저장소에 저장 (Artifact)
+      # 5. 빌드된 .app 파일을 Zip으로 압축
+      - name: Zip the app
+        run: |
+          cd dist
+          zip -r insta_crew4_mac.zip insta_crew4_mac.app
+
+      # 6. 압축된 파일 저장소에 저장 (Artifact)
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: insta_crew4_app
-          path: dist/insta_crew4.app # .app 결과물 위치
+          name: insta_crew4_mac # 다운로드할 Zip 파일 이름
+          path: dist/insta_crew4_mac.zip # 압축된 파일 위치
