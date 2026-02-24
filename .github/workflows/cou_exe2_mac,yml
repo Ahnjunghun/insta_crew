@@ -1,5 +1,6 @@
 name: Build Mac App
 
+
 on:
   push:
     branches: [ "main" ]  # main 브랜치에 코드 올리면 시작!
