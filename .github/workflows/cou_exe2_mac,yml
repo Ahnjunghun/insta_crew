@@ -1,0 +1,34 @@
+name: Build Mac App
+
+on:
+  push:
+    branches: [ "main" ]  # main 브랜치에 코드 올리면 시작!
+
+jobs:
+  build:
+    runs-on: macos-latest  # 깃허브의 맥 서버를 빌립니다
+
+    steps:
+    - name: 코드를 가져옵니다
+      uses: actions/checkout@v4
+
+    - name: 파이썬을 설치합니다
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: 필요한 라이브러리 설치
+      run: |
+        pip install pyinstaller pillow requests pandas openpyxl playwright
+        playwright install chromium
+
+    - name: 맥용 앱 빌드 시작
+      run: |
+        # --name 뒤에 원하는 파일명을 넣었어
+        pyinstaller --noconfirm --onefile --windowed --name "cou_exe2_mac" cou_exe_test2.py
+
+    - name: 빌드 결과물을 깃허브에 올리기
+      uses: actions/upload-artifact@v4
+      with:
+        name: cou_exe2_mac_app
+        path: dist/cou_exe2_mac  # 빌드된 파일 위치
